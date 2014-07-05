@@ -15,18 +15,12 @@
 #  limitations under the License.
 # ----------------------------------------------------------------------------
 
-import urllib2, base64, json
+import requests, base64, json
 from tabulate import tabulate
-import texttable as tt
 
 url = 'https://localhost:9443/stratos/admin/partition'
-request = urllib2.Request(url)
-
-base64string = base64.encodestring('%s:%s' % ('admin', 'admin')).replace('\n', '')
-request.add_header("Authorization", "Basic %s" % base64string)
-
-response = urllib2.urlopen(request).read()
-partitions = json.loads(response)
+response = requests.get(url, auth=('admin', 'admin'), verify=False)
+partitions = json.loads(response.text)
 
 table = []
 for p in partitions['partition']:

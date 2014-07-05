@@ -15,19 +15,13 @@
 #  limitations under the License.
 # ----------------------------------------------------------------------------
 
-import urllib2
-import base64
+import requests
 import json
 from tabulate import tabulate
 
 url = 'https://localhost:9443/stratos/admin/policy/deployment'
-request = urllib2.Request(url)
-
-base64string = base64.encodestring('%s:%s' % ('admin', 'admin')).replace('\n', '')
-request.add_header("Authorization", "Basic %s" % base64string)
-
-response = urllib2.urlopen(request).read()
-dep_policies = json.loads(response)
+response = requests.get(url, auth=('admin', 'admin'), verify=False)
+dep_policies = json.loads(response.text)
 
 table = []
 for p in dep_policies['deploymentPolicy']:

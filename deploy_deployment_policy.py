@@ -16,31 +16,21 @@
 # -----------------------------
 
 import json
-import urllib2
+import requests
 import logging
-import base64
 
 logging.basicConfig(filename='logs/stratos-cli.log',level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
 policy_file=open("/home/udara/projects/stratos-cli/testdep.json","r")
 data=policy_file.read()
-print data
+
 url = 'https://localhost:9443/stratos/admin/policy/deployment'
+headers = {'content-type': 'application/json'}
+response = requests.post(url, auth=('admin', 'admin'), verify=False, headers=headers, data=data)
+result=json.loads(response.text)
 
-request = urllib2.Request(url)
-base64string = base64.encodestring('%s:%s' % ('admin', 'admin')).replace('\n', '')
-request.add_header("Authorization", "Basic %s" % base64string)
-request.add_header('Content-Type', 'application/json')
-response=""
-
-try:
-    resp = urllib2.urlopen(request, data)
-    contents = resp.read()
-    response = json.loads(contents)
-    print response['stratosAdminResponse']['message']
-except urllib2.HTTPError, error:
-    contents = error.read()
-    response = json.loads(contents)
-    print "Error code: ", response['Error']['errorCode']
-    print "Error message: ", response['Error']['errorMessage']
-
+if response.status_code== requests.codes.ok:
+    print result['stratosAdminResponse']['message']
+else:
+    print "Error code: ", result['Error']['errorCode']
+    print "Error message: ", result['Error']['errorMessage']
