@@ -24,13 +24,13 @@ logging.basicConfig(filename='logs/stratos-cli.log',level=logging.DEBUG,format='
 
 policy_file=open("/home/udara/projects/stratos-cli/testdep.json","r")
 data=policy_file.read()
-
+print data
 url = 'https://localhost:9443/stratos/admin/policy/deployment'
-logging.debug('Metadata serive url = %s ' % url)
 
 request = urllib2.Request(url)
 base64string = base64.encodestring('%s:%s' % ('admin', 'admin')).replace('\n', '')
 request.add_header("Authorization", "Basic %s" % base64string)
+request.add_header('Content-Type', 'application/json')
 response=""
 
 try:

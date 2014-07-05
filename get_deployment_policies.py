@@ -15,9 +15,10 @@
 #  limitations under the License.
 # ----------------------------------------------------------------------------
 
-import urllib2, base64, json
+import urllib2
+import base64
+import json
 from tabulate import tabulate
-import texttable as tt
 
 url = 'https://localhost:9443/stratos/admin/policy/deployment'
 request = urllib2.Request(url)
