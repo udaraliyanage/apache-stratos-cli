@@ -28,14 +28,13 @@ data=policy_file.read()
 url = 'https://localhost:9443/stratos/admin/policy/deployment'
 logging.debug('Metadata serive url = %s ' % url)
 
-req = urllib2.Request(url)
+request = urllib2.Request(url)
 base64string = base64.encodestring('%s:%s' % ('admin', 'admin')).replace('\n', '')
-req.add_header("Authorization", "Basic %s" % base64string)
-req.add_header('Content-Type', 'application/json')
+request.add_header("Authorization", "Basic %s" % base64string)
 response=""
 
 try:
-    resp = urllib2.urlopen(req, data)
+    resp = urllib2.urlopen(request, data)
     contents = resp.read()
     response = json.loads(contents)
     print response['stratosAdminResponse']['message']
